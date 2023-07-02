@@ -62,4 +62,4 @@ RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
 ADD . .
 
 RUN chmod +x /myapp/scripts/start.sh
-CMD ["/bin/bash", "/myapp/scripts/start.sh"]
+CMD ["/bin/sh", "/myapp/scripts/start.sh"]
