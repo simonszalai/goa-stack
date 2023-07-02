@@ -47,6 +47,9 @@ RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
 # Finally, build the production image with minimal footprint
 FROM base
 
+# Install iptables
+RUN apt-get update && apt-get install -y iptables
+
 WORKDIR /myapp
 
 COPY --from=production-deps /myapp/node_modules /myapp/node_modules
@@ -58,6 +61,7 @@ COPY --from=build /myapp/public /myapp/public
 COPY --from=tailscale /app/tailscaled /app/tailscaled
 COPY --from=tailscale /app/tailscale /app/tailscale
 RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
+RUN touch /var/lib/tailscale/tailscaled.log.conf
 
 ADD . .
 
