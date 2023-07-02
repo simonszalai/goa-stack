@@ -13,11 +13,9 @@ import { MantineProvider } from '@mantine/core';
 import { StylesPlaceholder } from '@mantine/remix';
 
 import { getUser } from "~/session.server";
-import stylesheet from "~/tailwind.css";
 import { theme } from './theme';
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesheet },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
