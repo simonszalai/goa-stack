@@ -18,7 +18,7 @@ export default function NotesPage() {
 
   return (
     <div className="flex h-full min-h-screen flex-col">
-      <header className="flex items-center justify-between">
+      <header className="flex items-center">
         <h1 className="text-3xl font-bold">
           <Link to=".">Notes</Link>
         </h1>
