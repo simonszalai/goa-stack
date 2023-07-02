@@ -61,4 +61,4 @@ RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
 
 ADD . .
 
-CMD ["/scripts/start.sh"]
+CMD ["/myapp/scripts/start.sh"]
