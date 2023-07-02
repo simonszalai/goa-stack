@@ -37,6 +37,13 @@ RUN npx prisma generate
 ADD . .
 RUN npm run build
 
+# Download tailscale
+FROM alpine:latest as tailscale
+WORKDIR /app
+ENV TSFILE=tailscale_1.44.0_amd64.tgz
+RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
+    tar xzf ${TSFILE} --strip-components=1
+
 # Finally, build the production image with minimal footprint
 FROM base
 
@@ -47,6 +54,11 @@ COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
 
 COPY --from=build /myapp/build /myapp/build
 COPY --from=build /myapp/public /myapp/public
+
+COPY --from=tailscale /app/tailscaled /app/tailscaled
+COPY --from=tailscale /app/tailscale /app/tailscale
+RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
+
 ADD . .
 
-CMD ["npm", "start"]
+CMD ["/scripts/start.sh"]
