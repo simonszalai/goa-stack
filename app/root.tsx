@@ -9,9 +9,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { MantineProvider } from '@mantine/core';
+import { StylesPlaceholder } from '@mantine/remix';
 
 import { getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css";
+import { theme } from './theme';
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -24,10 +27,12 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function App() {
   return (
+    <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
     <html lang="en" className="h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <StylesPlaceholder />
         <Meta />
         <Links />
       </head>
@@ -38,5 +43,6 @@ export default function App() {
         <LiveReload />
       </body>
     </html>
+    </MantineProvider>
   );
 }
