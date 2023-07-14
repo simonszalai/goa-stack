@@ -47,8 +47,8 @@ RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
 # Finally, build the production image with minimal footprint
 FROM base
 
-# Install iptables
-RUN apt-get update && apt-get install -y iptables
+# Install iptables as tailscale requires it
+RUN apt-get update && apt-get install -y iptables ip6tables
 
 WORKDIR /myapp
 
