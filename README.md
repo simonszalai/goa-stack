@@ -1,20 +1,18 @@
-# Remix Blues Stack
-
-![The Remix Blues Stack](https://repository-images.githubusercontent.com/461012689/37d5bd8b-fa9c-4ab0-893c-f0a199d5012d)
+# Remix Goa Stack
 
 Learn more about [Remix Stacks](https://remix.run/stacks).
 
 ```
-npx create-remix@latest --template remix-run/blues-stack
+npx create-remix@latest --template simonszalai/goa-stack
 ```
 
 ## What's in the stack
 
 - [Multi-region Fly app deployment](https://fly.io/docs/reference/scaling/) with [Docker](https://www.docker.com/)
-- [Multi-region Fly PostgreSQL Cluster](https://fly.io/docs/getting-started/multi-region-databases/)
+- Crunchy Bridge Managed Postgres DB
 - Healthcheck endpoint for [Fly backups region fallbacks](https://fly.io/docs/reference/configuration/#services-http_checks)
 - [GitHub Actions](https://github.com/features/actions) for deploy on merge to production and staging environments
-- Email/Password Authentication with [cookie-based sessions](https://remix.run/utils/sessions#creatememorysessionstorage)
+- User Authentication with [Kinde](https://kinde.com)
 - Database ORM with [Prisma](https://prisma.io)
 - Styling with [Mantine](https://mantine.dev/)
 - End-to-end testing with [Cypress](https://cypress.io)
@@ -68,14 +66,6 @@ The database seed script creates a new user with some data you can use to get st
 - Password: `racheliscool`
 
 If you'd prefer not to use Docker, you can also use Fly's Wireguard VPN to connect to a development database (or even your production database). You can find the instructions to set up Wireguard [here](https://fly.io/docs/reference/private-networking/#install-your-wireguard-app), and the instructions for creating a development database [here](https://fly.io/docs/reference/postgres/).
-
-### Relevant code:
-
-This is a pretty simple note-taking app, but it's a good example of how you can build a full stack app with Prisma and Remix. The main functionality is creating users, logging in and out, and creating and deleting notes.
-
-- creating users, and logging in and out [./app/models/user.server.ts](./app/models/user.server.ts)
-- user sessions, and verifying them [./app/session.server.ts](./app/session.server.ts)
-- creating, and deleting notes [./app/models/note.server.ts](./app/models/note.server.ts)
 
 ## Deployment
 
@@ -133,19 +123,7 @@ Prior to your first deployment, you'll need to do a few things:
 
   If you don't have openssl installed, you can also use [1password](https://1password.com/password-generator/) to generate a random secret, just replace `$(openssl rand -hex 32)` with the generated secret.
 
-- Create a database for both your staging and production environments. Run the following:
-
-  ```sh
-  fly postgres create --name goa_stack-e7c0-db
-  fly postgres attach --app goa_stack-e7c0 goa_stack-e7c0-db
-
-  fly postgres create --name goa_stack-e7c0-staging-db
-  fly postgres attach --app goa_stack-e7c0-staging goa_stack-e7c0-staging-db
-  ```
-
-  > **Note:** You'll get the same warning for the same reason when attaching the staging database that you did in the `fly set secret` step above. No worries. Proceed!
-
-Fly will take care of setting the `DATABASE_URL` secret for you.
+- Create a database on Crunchy Bridge, then set the `DATABASE_URL` env variable to the connection string it provides on fly.io
 
 Now that everything is set up you can commit and push your changes to your repo. Every commit to your `main` branch will trigger a deployment to your production environment, and every commit to your `dev` branch will trigger a deployment to your staging environment.
 
